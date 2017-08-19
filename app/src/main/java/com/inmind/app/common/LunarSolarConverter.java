@@ -1,4 +1,7 @@
-package com.inmind.app.util;
+package com.inmind.app.common;
+
+import com.inmind.app.common.entity.Lunar;
+import com.inmind.app.common.entity.Solar;
 
 /**
  * Created by lixiang on 2017/1/10.
@@ -37,6 +40,7 @@ public class LunarSolarConverter{
             0xcd6a, 0xada, 0x95c, 0x949d, 0x149a, 0x1a2a, 0x5b25, 0x1aa4,
             0xfb52, 0x16b4, 0xaba, 0xa95b, 0x936, 0x1496, 0x9a4b, 0x154a,
             0x136a5, 0xda4, 0x15ac};
+
     private static int[] solar_1_1 = {1887, 0xec04c, 0xec23f, 0xec435, 0xec649,
             0xec83e, 0xeca51, 0xecc46, 0xece3a, 0xed04d, 0xed242, 0xed436,
             0xed64a, 0xed83f, 0xeda53, 0xedc48, 0xede3d, 0xee050, 0xee244,
@@ -75,7 +79,6 @@ public class LunarSolarConverter{
     private static final String[] tianGan = {"甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"};
     private static final String[] diZhi =     {"子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"};
     private static final String[] shengXiao = {"鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"};
-
 
     private static int getBitInt(int data, int length, int shift){
         return (data & (((1 << length) - 1) << shift)) >> shift;

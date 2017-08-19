@@ -1,4 +1,4 @@
-package com.inmind.app.model;
+package com.inmind.app.common.entity;
 
 import android.text.TextUtils;
 

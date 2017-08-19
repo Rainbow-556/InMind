@@ -1,4 +1,4 @@
-package com.inmind.app.util;
+package com.inmind.app.common.entity;
 
 /**
  * Created by lixiang on 2017/1/10.

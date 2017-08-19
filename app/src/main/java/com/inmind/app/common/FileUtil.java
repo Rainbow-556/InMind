@@ -1,4 +1,4 @@
-package com.inmind.app.util;
+package com.inmind.app.common;
 
 import android.content.Context;
 import android.os.Environment;
@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.inmind.app.model.BirthdayModel;
+import com.inmind.app.common.entity.BirthdayModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
