@@ -5,7 +5,7 @@ import android.text.TextUtils;
 /**
  * Created by lixiang on 2017/1/13.
  */
-public final class BirthdayModel{
+public final class User{
     public String realName;
     public String nickName;
     /**1男，2女*/

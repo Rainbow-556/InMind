@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.inmind.app.common.entity.BirthdayModel;
+import com.inmind.app.common.entity.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +29,7 @@ public final class FileUtil{
     public static final String FILE_NAME = "inmind_data.json";
     public static final Gson GSON = new Gson();
 
-    public static ArrayList<BirthdayModel> getBirthDayDataFromSDCard(Context context){
+    public static ArrayList<User> getBirthDayDataFromSDCard(Context context){
         File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+PATH+"/"+FILE_NAME);
         if(!f.exists()){
             return null;
@@ -67,7 +67,7 @@ public final class FileUtil{
         }
     }
 
-    private static ArrayList<BirthdayModel> parseJson(String json) throws JSONException{
+    private static ArrayList<User> parseJson(String json) throws JSONException{
         if(TextUtils.isEmpty(json)){
             return null;
         }
@@ -76,14 +76,14 @@ public final class FileUtil{
             return null;
         }
         int len = arr.length();
-        ArrayList<BirthdayModel> list = new ArrayList<>(len);
-        BirthdayModel model;
+        ArrayList<User> list = new ArrayList<>(len);
+        User model;
         for(int i = 0; i < len; i++){
             JSONObject obj = arr.optJSONObject(i);
             if(obj == null){
                 continue;
             }
-            model = new BirthdayModel();
+            model = new User();
             model.realName = obj.optString("realName", "");
             model.nickName = obj.optString("nickName", "");
             model.sex = obj.optInt("sex", 0);
@@ -101,7 +101,7 @@ public final class FileUtil{
         return list;
     }
 
-    public static boolean saveBirthDayDataToSDCard(ArrayList<BirthdayModel> list){
+    public static boolean saveBirthDayDataToSDCard(ArrayList<User> list){
         if(list == null || list.size() == 0){
             return true;
         }
@@ -110,7 +110,7 @@ public final class FileUtil{
 //        StringBuilder sb = new StringBuilder();
 //        sb.append("[");
 //        int len = list.size();
-//        BirthdayModel model;
+//        User model;
 //        for(int i = 0; i < len; i++){
 //            model = list.get(i);
 //            if(model != null){
