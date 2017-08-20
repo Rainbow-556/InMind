@@ -14,8 +14,8 @@ public class UserPresenter implements HomeContract.IUserPresenter{
     private HomeContract.IHomeView mView;
     private UserRepository mUserRepository;
 
-    public UserPresenter(){
-        mUserRepository = new UserRepository();
+    public UserPresenter(UserRepository userRepository){
+        this.mUserRepository = userRepository;
     }
 
     @Override

@@ -1,22 +1,25 @@
 package com.inmind.app.ui.base;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
+
+import com.inmind.app.common.ToastUtil;
+import com.inmind.app.ui.dialog.BaseDialog;
+import com.inmind.app.ui.dialog.LoadingDialog;
 
 /**
  * Created by lixiang on 2017/8/19.
  */
 public abstract class BaseActivity extends AppCompatActivity{
-    private Dialog mLoadingDialog;
+    private BaseDialog mLoadingDialog;
+    protected BaseActivity mThisActivity;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState){
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        mThisActivity = this;
+        setContentView(getLayoutId());
+        initView();
         initPresenter();
     }
 
@@ -29,18 +32,19 @@ public abstract class BaseActivity extends AppCompatActivity{
         destroyPresenter();
     }
 
+    protected abstract int getLayoutId();
+
+    protected abstract void initView();
+
     protected abstract void initPresenter();
 
     protected abstract void destroyPresenter();
 
     protected void showLoadingInner(boolean cancelable){
         if(mLoadingDialog == null){
-            mLoadingDialog = new ProgressDialog(this);
-            mLoadingDialog.setCanceledOnTouchOutside(false);
-            mLoadingDialog.setTitle("Loading...");
+            mLoadingDialog = new LoadingDialog(mThisActivity);
         }
-        mLoadingDialog.setCancelable(cancelable);
-        mLoadingDialog.show();
+        mLoadingDialog.show(cancelable);
     }
 
     protected void hideLoadingInner(){
@@ -50,6 +54,6 @@ public abstract class BaseActivity extends AppCompatActivity{
     }
 
     protected void showToastInner(String msg){
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        ToastUtil.showToast(mThisActivity, msg);
     }
 }
