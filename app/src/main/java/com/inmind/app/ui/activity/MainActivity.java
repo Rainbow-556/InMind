@@ -1,31 +1,34 @@
 package com.inmind.app.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.inmind.app.R;
-import com.inmind.app.common.CommonUtil;
 import com.inmind.app.common.ViewUtil;
-import com.inmind.app.common.entity.User;
-import com.inmind.app.model.UserRepositoryImpl;
+import com.inmind.app.common.entity.Person;
+import com.inmind.app.model.PersonRepositoryImpl;
 import com.inmind.app.ui.base.BaseActivity;
 import com.inmind.app.ui.mvp.contract.HomeContract;
-import com.inmind.app.ui.mvp.presenter.UserPresenter;
+import com.inmind.app.ui.mvp.presenter.HomePresenter;
 
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements HomeContract.IHomeView, View.OnClickListener{
-    private HomeContract.IUserPresenter mUserPresenter;
-    private PopupWindow mPopupWindow;
+public final class MainActivity extends BaseActivity implements HomeContract.IHomeView, View.OnClickListener{
+    private HomeContract.IHomePresenter mHomePresenter;
     private ImageView ivOption;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        mUserPresenter.fetchUsers();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mHomePresenter.fetchPerson();
     }
 
     @Override
@@ -35,7 +38,10 @@ public class MainActivity extends BaseActivity implements HomeContract.IHomeView
 
     @Override
     protected void initView(){
+        TextView tvTitle = ViewUtil.findView(this, R.id.tv_title);
+        tvTitle.setText("In Mind");
         ivOption = ViewUtil.findView(this, R.id.iv_option);
+        ivOption.setVisibility(View.VISIBLE);
         ivOption.setOnClickListener(this);
     }
 
@@ -56,34 +62,31 @@ public class MainActivity extends BaseActivity implements HomeContract.IHomeView
 
     @Override
     protected void initPresenter(){
-        mUserPresenter = new UserPresenter(new UserRepositoryImpl());
-        mUserPresenter.attachView(this);
+        mHomePresenter = new HomePresenter(new PersonRepositoryImpl());
+        mHomePresenter.attachView(this);
     }
 
     @Override
     protected void destroyPresenter(){
-        mUserPresenter.detachView();
+        mHomePresenter.detachView();
     }
 
     @Override
-    public void showUserList(List<User> users){
-        Log.e("lx", users.toString());
+    public void showUserList(List<Person> users){
+
     }
 
     @Override
     public void onClick(View view){
         switch(view.getId()){
             case R.id.iv_option:
-                showOptionWindow();
+                goAddPerson();
                 break;
         }
     }
 
-    private void showOptionWindow(){
-        if(mPopupWindow == null){
-            View view = getLayoutInflater().inflate(R.layout.pop_window_option, null);
-            mPopupWindow = new PopupWindow(view, (int) CommonUtil.dp2px(130), (int) CommonUtil.dp2px(150));
-        }
-        mPopupWindow.showAsDropDown(ivOption);
+    private void goAddPerson(){
+        Intent intent = new Intent(mThisActivity, AddPersonActivity.class);
+        startActivity(intent);
     }
 }

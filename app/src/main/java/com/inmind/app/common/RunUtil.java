@@ -23,13 +23,19 @@ public final class RunUtil{
         AsyncTask<Void, Void, T> task = new AsyncTask(){
             @Override
             protected T doInBackground(Object[] objects){
-                return work.execute();
+                T data = null;
+                try{
+                    data = work.execute();
+                }catch(Exception e){
+                    work.errMsg = e.getMessage();
+                }
+                return data;
             }
 
             @Override
             protected void onPostExecute(Object o){
                 if(callback != null){
-                    callback.onExecuted((T) o, null);
+                    callback.onExecuted((T) o, work.errMsg);
                 }
             }
         };
@@ -43,7 +49,9 @@ public final class RunUtil{
         UI_HANDLER.post(runnable);
     }
 
-    public interface Work<T>{
-        T execute();
+    public static abstract class Work<T>{
+        public String errMsg;
+
+        public abstract T execute();
     }
 }

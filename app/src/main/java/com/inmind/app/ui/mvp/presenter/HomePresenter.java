@@ -1,8 +1,8 @@
 package com.inmind.app.ui.mvp.presenter;
 
 import com.inmind.app.common.ExecutionCallback;
-import com.inmind.app.common.entity.User;
-import com.inmind.app.model.UserRepository;
+import com.inmind.app.common.entity.Person;
+import com.inmind.app.model.PersonRepository;
 import com.inmind.app.ui.mvp.contract.HomeContract;
 
 import java.util.List;
@@ -10,12 +10,12 @@ import java.util.List;
 /**
  * Created by lixiang on 2017/8/19.
  */
-public class UserPresenter implements HomeContract.IUserPresenter{
+public class HomePresenter implements HomeContract.IHomePresenter{
     private HomeContract.IHomeView mView;
-    private UserRepository mUserRepository;
+    private PersonRepository mPersonRepository;
 
-    public UserPresenter(UserRepository userRepository){
-        this.mUserRepository = userRepository;
+    public HomePresenter(PersonRepository userRepository){
+        this.mPersonRepository = userRepository;
     }
 
     @Override
@@ -34,11 +34,11 @@ public class UserPresenter implements HomeContract.IUserPresenter{
     }
 
     @Override
-    public void fetchUsers(){
+    public void fetchPerson(){
         mView.showLoading(true);
-        mUserRepository.getUsers(new ExecutionCallback<List<User>>(){
+        mPersonRepository.getPersons(new ExecutionCallback<List<Person>>(){
             @Override
-            public void onExecuted(List<User> data, String err){
+            public void onExecuted(List<Person> data, String err){
                 if(isViewInactive()){
                     return;
                 }
@@ -53,14 +53,14 @@ public class UserPresenter implements HomeContract.IUserPresenter{
     }
 
     @Override
-    public void deleteUser(User user){
+    public void deletePerson(Person user){
         if(user == null){
             return;
         }
         mView.showLoading(true);
-        mUserRepository.deleteUser(user, new ExecutionCallback<Boolean>(){
+        mPersonRepository.deletePerson(user, new ExecutionCallback<Person>(){
             @Override
-            public void onExecuted(Boolean data, String err){
+            public void onExecuted(Person data, String err){
                 if(isViewInactive()){
                     return;
                 }
@@ -75,14 +75,14 @@ public class UserPresenter implements HomeContract.IUserPresenter{
     }
 
     @Override
-    public void updateUser(User user){
+    public void updatePerson(Person user){
         if(user == null){
             return;
         }
         mView.showLoading(true);
-        mUserRepository.updateUser(user, new ExecutionCallback<Boolean>(){
+        mPersonRepository.updatePerson(user, new ExecutionCallback<Person>(){
             @Override
-            public void onExecuted(Boolean data, String err){
+            public void onExecuted(Person data, String err){
                 if(isViewInactive()){
                     return;
                 }

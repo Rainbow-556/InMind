@@ -5,4 +5,13 @@
     android:layout_height="150dp"
     android:background="@color/colorAccent"
     android:orientation="vertical">
+    <ImageView
+        android:id="@+id/tv_add"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/selector_common_click"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="Add"
+        android:textSize="23sp"/>
 </LinearLayout>

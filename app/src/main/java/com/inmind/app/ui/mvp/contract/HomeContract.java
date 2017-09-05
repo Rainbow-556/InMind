@@ -1,6 +1,6 @@
 package com.inmind.app.ui.mvp.contract;
 
-import com.inmind.app.common.entity.User;
+import com.inmind.app.common.entity.Person;
 import com.inmind.app.ui.mvp.IPresenter;
 import com.inmind.app.ui.mvp.IView;
 
@@ -12,14 +12,14 @@ import java.util.List;
 public interface HomeContract{
 
     interface IHomeView extends IView{
-        void showUserList(List<User> users);
+        void showUserList(List<Person> persons);
     }
 
-    interface IUserPresenter extends IPresenter<IHomeView>{
-        void fetchUsers();
+    interface IHomePresenter extends IPresenter<IHomeView>{
+        void fetchPerson();
 
-        void deleteUser(User user);
+        void deletePerson(Person person);
 
-        void updateUser(User user);
+        void updatePerson(Person person);
     }
 }

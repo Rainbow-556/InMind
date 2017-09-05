@@ -32,7 +32,7 @@ public final class LoadingDialog extends BaseDialog{
     @Override
     public void show(boolean cancelable){
         init();
-        mDialog.setCancelable(false);
+        mDialog.setCancelable(cancelable);
         mDialog.show();
     }
 

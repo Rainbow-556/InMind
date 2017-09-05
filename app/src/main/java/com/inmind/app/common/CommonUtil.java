@@ -1,14 +1,19 @@
 package com.inmind.app.common;
 
+import com.inmind.app.ui.base.InMindApplication;
+
 import java.io.Closeable;
 
 /**
  * Created by lixiang on 2017/8/19.
  */
 public final class CommonUtil{
-    private static final float DENSITY = 3;
+    private static float DENSITY;
+    static{
+        DENSITY = InMindApplication.getInstance().getResources().getDisplayMetrics().density;
+    }
 
-    public void closeStream(Closeable closeable){
+    public static void closeStream(Closeable closeable){
         try{
             if(closeable != null){
                 closeable.close();
