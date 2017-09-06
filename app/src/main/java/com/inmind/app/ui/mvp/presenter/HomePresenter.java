@@ -10,17 +10,17 @@ import java.util.List;
 /**
  * Created by lixiang on 2017/8/19.
  */
-public class HomePresenter implements HomeContract.IHomePresenter{
+public final class HomePresenter implements HomeContract.IHomePresenter{
     private HomeContract.IHomeView mView;
     private PersonRepository mPersonRepository;
 
-    public HomePresenter(PersonRepository userRepository){
-        this.mPersonRepository = userRepository;
+    public HomePresenter(PersonRepository personRepository){
+        this.mPersonRepository = personRepository;
     }
 
     @Override
     public void attachView(HomeContract.IHomeView view){
-        mView = view;
+        this.mView = view;
     }
 
     @Override
@@ -53,12 +53,12 @@ public class HomePresenter implements HomeContract.IHomePresenter{
     }
 
     @Override
-    public void deletePerson(Person user){
-        if(user == null){
+    public void deletePerson(Person person){
+        if(person == null){
             return;
         }
         mView.showLoading(true);
-        mPersonRepository.deletePerson(user, new ExecutionCallback<Person>(){
+        mPersonRepository.deletePerson(person, new ExecutionCallback<Person>(){
             @Override
             public void onExecuted(Person data, String err){
                 if(isViewInactive()){
@@ -75,12 +75,12 @@ public class HomePresenter implements HomeContract.IHomePresenter{
     }
 
     @Override
-    public void updatePerson(Person user){
-        if(user == null){
+    public void updatePerson(Person person){
+        if(person == null){
             return;
         }
         mView.showLoading(true);
-        mPersonRepository.updatePerson(user, new ExecutionCallback<Person>(){
+        mPersonRepository.updatePerson(person, new ExecutionCallback<Person>(){
             @Override
             public void onExecuted(Person data, String err){
                 if(isViewInactive()){

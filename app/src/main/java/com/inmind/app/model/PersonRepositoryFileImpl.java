@@ -16,12 +16,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by lixiang on 2017/8/19.
  */
-public class PersonRepositoryImpl implements PersonRepository{
+public final class PersonRepositoryFileImpl implements PersonRepository{
     /*personData为json: []*/
     private static final String FILE_NAME = "personData.txt";
     private static final File DATA_FILE = new File(InMindApplication.getInstance().getExternalCacheDir(), FILE_NAME);
@@ -33,7 +35,10 @@ public class PersonRepositoryImpl implements PersonRepository{
         RunUtil.runOnWorkThread(new RunUtil.Work<List<Person>>(){
             @Override
             public List<Person> execute(){
-                List<Person> list = null;
+                if(!DATA_FILE.exists()){
+                    return Collections.emptyList();
+                }
+                List<Person> list = Collections.emptyList();
                 ByteArrayOutputStream baos = null;
                 FileInputStream in = null;
                 try{
@@ -46,6 +51,22 @@ public class PersonRepositoryImpl implements PersonRepository{
                     }
                     String json = new String(baos.toByteArray());
                     list = GSON.fromJson(json, new TypeToken<List<Person>>(){}.getType());
+                    for(Person p : list){
+                        p.initExtraFields();
+                    }
+                    Collections.sort(list, new Comparator<Person>(){
+                        @Override
+                        public int compare(Person o1, Person o2){
+                            long diff = o1.remainDays - o2.remainDays;
+                            if(diff > 0){
+                                return 1;
+                            }else if(diff < 0){
+                                return -1;
+                            }else{
+                                return 0;
+                            }
+                        }
+                    });
                     sPersonList.clear();
                     sPersonList.addAll(list);
                     Log.e("lx", "getPersons(): " + list.toString());
@@ -71,7 +92,6 @@ public class PersonRepositoryImpl implements PersonRepository{
 
     @Override
     public void addPerson(final Person person, ExecutionCallback<Person> callback){
-        Log.e("lx", "addPerson(): " + person.toString());
         final RunUtil.Work<Person> work = new RunUtil.Work<Person>(){
             @Override
             public Person execute(){
@@ -84,6 +104,7 @@ public class PersonRepositoryImpl implements PersonRepository{
                 }else{
                     person.id = 1;
                 }
+                Log.e("lx", "addPerson(): " + person.toString());
                 BufferedOutputStream out = null;
                 try{
                     sPersonList.add(person);

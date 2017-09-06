@@ -6,6 +6,7 @@ package com.inmind.app.common.entity;
  */
 public class Solar{
     public int solarDay;
+    /**1 ~ 12*/
     public int solarMonth;
     public int solarYear;
 

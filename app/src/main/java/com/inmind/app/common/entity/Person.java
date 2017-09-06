@@ -2,7 +2,10 @@ package com.inmind.app.common.entity;
 
 import android.text.TextUtils;
 
+import com.inmind.app.common.CommonUtil;
 import com.inmind.app.common.LunarSolarConverter;
+
+import java.util.Calendar;
 
 /**
  * Created by lixiang on 2017/9/4.
@@ -17,6 +20,8 @@ public class Person{
     public Lunar lunar;
     /**公历*/
     public Solar solar;
+    public long remainDays;
+    public String birthdayDateText;
 
     /**
      * @param nickName
@@ -46,6 +51,36 @@ public class Person{
             solar.solarDay = day;
             lunar = LunarSolarConverter.solarToLunar(solar);
         }
+        calcRemainDays();
+    }
+
+    public void calcRemainDays(){
+        Calendar cur = Calendar.getInstance();
+        int year = cur.get(Calendar.YEAR);
+        int month, day;
+        if(!isLunar){
+            month = solar.solarMonth;
+            day = solar.solarDay;
+        }else{
+            Lunar tempLunar = new Lunar();
+            tempLunar.lunarYear = year;
+            tempLunar.lunarMonth = lunar.lunarMonth;
+            tempLunar.lunarDay = lunar.lunarDay;
+            Solar solar = LunarSolarConverter.lunarToSolar(tempLunar);
+            year = solar.solarYear;
+            month = solar.solarMonth;
+            day = solar.solarDay;
+        }
+        long days = CommonUtil.calcDiffDays(year, month, day);
+        if(days < 0){
+            days = CommonUtil.calcDiffDays(year + 1, month, day);
+        }
+        this.remainDays = days;
+    }
+
+    public void initExtraFields(){
+        calcRemainDays();
+        this.birthdayDateText = LunarSolarConverter.formatBirthdayDate(this);
     }
 
     @Override

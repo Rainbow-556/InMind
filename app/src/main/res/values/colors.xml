@@ -7,4 +7,6 @@
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="common_gray_line">#EAEAEA</color>
+    <color name="text_gray_w_main">#B8B8B8</color>
+    <color name="text_red_w">#F85F30</color>
 </resources>

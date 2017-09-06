@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.inmind.app.R;
 import com.inmind.app.common.ViewUtil;
 import com.inmind.app.common.entity.Person;
-import com.inmind.app.model.PersonRepositoryImpl;
+import com.inmind.app.model.PersonRepositoryFileImpl;
 import com.inmind.app.ui.base.BaseActivity;
 import com.inmind.app.ui.mvp.contract.AddPersonContract;
 import com.inmind.app.ui.mvp.presenter.AddPersonPresenter;
@@ -56,7 +56,7 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
 
     @Override
     protected void initPresenter(){
-        mAddPersonPresenter = new AddPersonPresenter(new PersonRepositoryImpl());
+        mAddPersonPresenter = new AddPersonPresenter(new PersonRepositoryFileImpl());
         mAddPersonPresenter.attachView(this);
     }
 

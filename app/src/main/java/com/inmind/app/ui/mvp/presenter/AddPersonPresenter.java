@@ -16,7 +16,6 @@ public final class AddPersonPresenter implements AddPersonContract.IAddPersonPre
         this.mPersonRepository = repository;
     }
 
-
     @Override
     public void attachView(AddPersonContract.IAddPersonView view){
         this.mView = view;
@@ -44,6 +43,11 @@ public final class AddPersonPresenter implements AddPersonContract.IAddPersonPre
                     return;
                 }
                 mView.hideLoading();
+                if(err != null){
+                    mView.showToast(err);
+                    return;
+                }
+                mView.showToast(data.nickName+" add success");
             }
         });
     }

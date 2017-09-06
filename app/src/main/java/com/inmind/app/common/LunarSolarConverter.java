@@ -1,6 +1,7 @@
 package com.inmind.app.common;
 
 import com.inmind.app.common.entity.Lunar;
+import com.inmind.app.common.entity.Person;
 import com.inmind.app.common.entity.Solar;
 
 /**
@@ -11,6 +12,8 @@ public class LunarSolarConverter{
     private static final String[] Tian_Gan = {"甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"};
     private static final String[] Di_Zhi =     {"子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"};
     private static final String[] Sheng_Xiao = {"鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"};
+    private static final String[] MONTH_ARR = {"", "正", "二", "三", "四", "五", "六", "七", "八", "九", "十", "冬", "腊"};
+    private static final String[] DAY_ARR = {"", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
 
     /**|----4位闰月|-------------13位1为30天，0为29天|*/
     private static int[] LUNAR_MONTH_DAYS = {1887, 0x1694, 0x16aa, 0x4ad5,
@@ -229,5 +232,33 @@ public class LunarSolarConverter{
         lunar.lunarDay = lunarD;
         lunar.animal = lunarYearToShengXiao(lunar.lunarYear);
         return lunar;
+    }
+
+    public static String formatBirthdayDate(Person person){
+        try{
+            StringBuilder ret = new StringBuilder();
+            if(person.isLunar){
+                Lunar lunar = person.lunar;
+                ret.append(MONTH_ARR[lunar.lunarMonth]).append("月");
+                if(lunar.lunarDay <= 10){
+                    ret.append("初").append(DAY_ARR[lunar.lunarDay]);
+                }else if(lunar.lunarDay < 20){
+                    ret.append("十").append(DAY_ARR[lunar.lunarDay - 10]);
+                }else if(lunar.lunarDay == 20){
+                    ret.append("二十");
+                }else if(lunar.lunarDay >= 30){
+                    ret.append("三十");
+                }else{
+                    ret.append("廿").append(DAY_ARR[lunar.lunarDay - 20]);
+                }
+            }else{
+                Solar solar = person.solar;
+                ret.append(String.valueOf(solar.solarMonth)).append("月")
+                        .append(String.valueOf(solar.solarDay)).append("日");
+            }
+            return ret.toString();
+        }catch(Exception e){
+            return "";
+        }
     }
 }

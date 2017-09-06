@@ -52,6 +52,6 @@ public final class RunUtil{
     public static abstract class Work<T>{
         public String errMsg;
 
-        public abstract T execute();
+        public abstract T execute() throws Exception;
     }
 }

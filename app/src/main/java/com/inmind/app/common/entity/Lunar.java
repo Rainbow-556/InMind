@@ -10,6 +10,7 @@ public class Lunar{
      */
     public boolean isLeap;
     public int lunarDay;
+    /**1 ~ 12*/
     public int lunarMonth;
     public int lunarYear;
     public String animal;

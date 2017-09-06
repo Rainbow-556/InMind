@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@drawable/selector_common_click"
+    android:clickable="true"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            tools:text="nick name"/>
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/text_gray_w_main"
+            android:textSize="15sp"
+            tools:text="11月28日"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_day_char"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="天"
+        android:textColor="@color/text_red_w"
+        android:textSize="12sp"/>
+    <TextView
+        android:id="@+id/tv_remain_days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tv_day_char"
+        android:layout_toLeftOf="@id/tv_day_char"
+        android:textColor="@color/text_red_w"
+        android:textSize="22sp"
+        tools:text="18"/>
+</RelativeLayout>
