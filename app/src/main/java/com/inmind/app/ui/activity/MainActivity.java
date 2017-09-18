@@ -15,8 +15,8 @@ import com.inmind.app.model.PersonRepositoryFileImpl;
 import com.inmind.app.ui.adapter.CommonDecoration;
 import com.inmind.app.ui.adapter.PersonAdapter;
 import com.inmind.app.ui.base.BaseActivity;
-import com.inmind.app.ui.mvp.contract.HomeContract;
-import com.inmind.app.ui.mvp.presenter.HomePresenter;
+import com.inmind.app.mvp.contract.HomeContract;
+import com.inmind.app.mvp.presenter.HomePresenter;
 
 import java.util.List;
 

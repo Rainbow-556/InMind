@@ -1,4 +1,4 @@
-package com.inmind.app.ui.mvp;
+package com.inmind.app.mvp;
 
 /**
  * Created by lixiang on 2017/8/19.

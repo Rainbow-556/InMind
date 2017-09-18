@@ -14,8 +14,8 @@ import com.inmind.app.common.ViewUtil;
 import com.inmind.app.common.entity.Person;
 import com.inmind.app.model.PersonRepositoryFileImpl;
 import com.inmind.app.ui.base.BaseActivity;
-import com.inmind.app.ui.mvp.contract.AddPersonContract;
-import com.inmind.app.ui.mvp.presenter.AddPersonPresenter;
+import com.inmind.app.mvp.contract.AddPersonContract;
+import com.inmind.app.mvp.presenter.AddPersonPresenter;
 
 /**
  * Created by lixiang on 2017/9/4.

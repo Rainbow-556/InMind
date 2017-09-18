@@ -1,8 +1,8 @@
-package com.inmind.app.ui.mvp.contract;
+package com.inmind.app.mvp.contract;
 
 import com.inmind.app.common.entity.Person;
-import com.inmind.app.ui.mvp.IPresenter;
-import com.inmind.app.ui.mvp.IView;
+import com.inmind.app.mvp.IPresenter;
+import com.inmind.app.mvp.IView;
 
 /**
  * Created by lixiang on 2017/9/4.

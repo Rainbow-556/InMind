@@ -1,9 +1,9 @@
-package com.inmind.app.ui.mvp.presenter;
+package com.inmind.app.mvp.presenter;
 
 import com.inmind.app.common.ExecutionCallback;
 import com.inmind.app.common.entity.Person;
 import com.inmind.app.model.PersonRepository;
-import com.inmind.app.ui.mvp.contract.HomeContract;
+import com.inmind.app.mvp.contract.HomeContract;
 
 import java.util.List;
 
