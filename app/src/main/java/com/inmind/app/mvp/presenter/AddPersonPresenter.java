@@ -51,4 +51,48 @@ public final class AddPersonPresenter implements AddPersonContract.IAddPersonPre
             }
         });
     }
+
+    @Override
+    public void updatePerson(Person person){
+        if(person == null){
+            return;
+        }
+        mView.showLoading(true);
+        mPersonRepository.updatePerson(person, new ExecutionCallback<Person>(){
+            @Override
+            public void onExecuted(Person data, String err){
+                if(isViewInactive()){
+                    return;
+                }
+                mView.hideLoading();
+                if(err != null){
+                    mView.showToast(err);
+                    return;
+                }
+                mView.showToast(data.nickName+" update success");
+            }
+        });
+    }
+
+    @Override
+    public void deletePerson(Person person){
+        if(person == null){
+            return;
+        }
+        mView.showLoading(true);
+        mPersonRepository.deletePerson(person, new ExecutionCallback<Person>(){
+            @Override
+            public void onExecuted(Person data, String err){
+                if(isViewInactive()){
+                    return;
+                }
+                mView.hideLoading();
+                if(err != null){
+                    mView.showToast(err);
+                    return;
+                }
+                mView.showToast(data.nickName+" delete success");
+            }
+        });
+    }
 }

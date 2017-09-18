@@ -13,6 +13,7 @@ import com.inmind.app.common.ViewUtil;
 import com.inmind.app.common.entity.Person;
 import com.inmind.app.model.PersonRepositoryFileImpl;
 import com.inmind.app.ui.adapter.CommonDecoration;
+import com.inmind.app.ui.adapter.OnItemClickListener;
 import com.inmind.app.ui.adapter.PersonAdapter;
 import com.inmind.app.ui.base.BaseActivity;
 import com.inmind.app.mvp.contract.HomeContract;
@@ -20,7 +21,7 @@ import com.inmind.app.mvp.presenter.HomePresenter;
 
 import java.util.List;
 
-public final class MainActivity extends BaseActivity implements HomeContract.IHomeView, View.OnClickListener{
+public final class MainActivity extends BaseActivity implements HomeContract.IHomeView, View.OnClickListener, OnItemClickListener<Person>{
     private HomeContract.IHomePresenter mHomePresenter;
     private ImageView ivOption;
     private RecyclerView mRecyclerView;
@@ -52,6 +53,7 @@ public final class MainActivity extends BaseActivity implements HomeContract.IHo
         ivOption.setOnClickListener(this);
         mRecyclerView = ViewUtil.findView(this, R.id.list);
         mAdapter = new PersonAdapter(this);
+        mAdapter.setOnItemClickListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new CommonDecoration());
         mRecyclerView.setAdapter(mAdapter);
@@ -92,13 +94,20 @@ public final class MainActivity extends BaseActivity implements HomeContract.IHo
     public void onClick(View view){
         switch(view.getId()){
             case R.id.iv_option:
-                goAddPerson();
+                toAddPerson();
                 break;
         }
     }
 
-    private void goAddPerson(){
+    private void toAddPerson(){
         Intent intent = new Intent(mThisActivity, AddPersonActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemClick(Person data){
+        Intent intent = new Intent(mThisActivity, AddPersonActivity.class);
+        intent.putExtra("person", data);
         startActivity(intent);
     }
 }

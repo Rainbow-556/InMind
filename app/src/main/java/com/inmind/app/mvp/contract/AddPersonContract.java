@@ -13,5 +13,9 @@ public interface AddPersonContract{
 
     interface IAddPersonPresenter extends IPresenter<IAddPersonView>{
         void addPerson(Person person);
+
+        void updatePerson(Person person);
+
+        void deletePerson(Person person);
     }
 }

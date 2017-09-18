@@ -1,10 +1,12 @@
 package com.inmind.app.common.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by lixiang on 2017/1/10.
  * 农历
  */
-public class Lunar{
+public class Lunar implements Serializable{
     /**
      * 是否为闰月
      */

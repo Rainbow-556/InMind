@@ -5,12 +5,13 @@ import android.text.TextUtils;
 import com.inmind.app.common.CommonUtil;
 import com.inmind.app.common.LunarSolarConverter;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
  * Created by lixiang on 2017/9/4.
  */
-public class Person{
+public class Person implements Serializable{
     public int id;
     public String realName;
     public String nickName;

@@ -32,7 +32,7 @@ public final class PersonRepositoryFileImpl implements PersonRepository{
 
     @Override
     public void getPersons(ExecutionCallback<List<Person>> callback){
-        RunUtil.runOnWorkThread(new RunUtil.Work<List<Person>>(){
+        RunUtil.Work<List<Person>> work = new RunUtil.Work<List<Person>>(){
             @Override
             public List<Person> execute(){
                 if(!DATA_FILE.exists()){
@@ -78,16 +78,66 @@ public final class PersonRepositoryFileImpl implements PersonRepository{
                 }
                 return list;
             }
-        }, callback);
+        };
+        RunUtil.runOnWorkThread(work, callback);
     }
 
     @Override
-    public void updatePerson(Person person, ExecutionCallback<Person> callback){
-
+    public void updatePerson(final Person person, ExecutionCallback<Person> callback){
+        final RunUtil.Work<Person> work = new RunUtil.Work<Person>(){
+            @Override
+            public Person execute(){
+                int index = sPersonList.indexOf(person);
+                if(index <= -1){
+                    this.errMsg = "person not exists";
+                    return person;
+                }
+                sPersonList.set(index, person);
+                Log.e("lx", "updatePerson(): " + person.toString());
+                BufferedOutputStream out = null;
+                try{
+                    String json = GSON.toJson(sPersonList);
+                    out = new BufferedOutputStream(new FileOutputStream(DATA_FILE));
+                    out.write(json.getBytes());
+                }catch(Exception e){
+                    e.printStackTrace();
+                    sPersonList.remove(person);
+                }finally{
+                    CommonUtil.closeStream(out);
+                }
+                return person;
+            }
+        };
+        RunUtil.runOnWorkThread(work, callback);
     }
 
     @Override
-    public void deletePerson(Person person, ExecutionCallback<Person> callback){
+    public void deletePerson(final Person person, ExecutionCallback<Person> callback){
+        final RunUtil.Work<Person> work = new RunUtil.Work<Person>(){
+            @Override
+            public Person execute(){
+                int index = sPersonList.indexOf(person);
+                if(index <= -1){
+                    this.errMsg = "person not exists";
+                    return person;
+                }
+                sPersonList.remove(index);
+                Log.e("lx", "deletePerson(): " + person.toString());
+                BufferedOutputStream out = null;
+                try{
+                    String json = GSON.toJson(sPersonList);
+                    out = new BufferedOutputStream(new FileOutputStream(DATA_FILE));
+                    out.write(json.getBytes());
+                }catch(Exception e){
+                    e.printStackTrace();
+                    sPersonList.remove(person);
+                }finally{
+                    CommonUtil.closeStream(out);
+                }
+                return person;
+            }
+        };
+        RunUtil.runOnWorkThread(work, callback);
     }
 
     @Override
@@ -100,7 +150,13 @@ public final class PersonRepositoryFileImpl implements PersonRepository{
                     return person;
                 }
                 if(!sPersonList.isEmpty()){
-                    person.id = sPersonList.get(sPersonList.size() - 1).id + 1;
+                    int id = -1;
+                    for(Person p : sPersonList){
+                        if(p.id > id){
+                            id = p.id;
+                        }
+                    }
+                    person.id = id + 1;
                 }else{
                     person.id = 1;
                 }

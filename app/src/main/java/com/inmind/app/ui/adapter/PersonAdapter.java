@@ -19,7 +19,8 @@ import java.util.List;
  */
 public final class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonHolder>{
     private Context mContext;
-    private List<Person> mList = new ArrayList<>();
+    private List<Person> mData = new ArrayList<>();
+    private OnItemClickListener<Person> mOnItemClickListener;
 
     public PersonAdapter(Context context){
         this.mContext = context;
@@ -34,18 +35,18 @@ public final class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.Pers
 
     @Override
     public void onBindViewHolder(PersonHolder holder, int position){
-        holder.setItemInfo(mList.get(position));
+        holder.setItemInfo(mData.get(position));
     }
 
     @Override
     public int getItemCount(){
-        return mList.size();
+        return mData.size();
     }
 
     public void setList(List<Person> list){
-        mList.clear();
+        mData.clear();
         if(list != null && !list.isEmpty()){
-            mList.addAll(list);
+            mData.addAll(list);
         }
         notifyDataSetChanged();
     }
@@ -62,6 +63,14 @@ public final class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.Pers
             tvBirthday = ViewUtil.findView(itemView, R.id.tv_date);
             tvRemainDays = ViewUtil.findView(itemView, R.id.tv_remain_days);
             tvDayChar = ViewUtil.findView(itemView, R.id.tv_day_char);
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    if(mOnItemClickListener != null){
+                        mOnItemClickListener.onItemClick(person);
+                    }
+                }
+            });
         }
 
         public void setItemInfo(Person person){
@@ -80,5 +89,9 @@ public final class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.Pers
             }
             tvRemainDays.setText(dayStr);
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener<Person> listener){
+        this.mOnItemClickListener = listener;
     }
 }

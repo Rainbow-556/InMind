@@ -13,9 +13,9 @@ import com.inmind.app.R;
 import com.inmind.app.common.ViewUtil;
 import com.inmind.app.common.entity.Person;
 import com.inmind.app.model.PersonRepositoryFileImpl;
-import com.inmind.app.ui.base.BaseActivity;
 import com.inmind.app.mvp.contract.AddPersonContract;
 import com.inmind.app.mvp.presenter.AddPersonPresenter;
+import com.inmind.app.ui.base.BaseActivity;
 
 /**
  * Created by lixiang on 2017/9/4.
@@ -26,6 +26,8 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
     private RadioButton rbSolar, rbLunar;
     private LinearLayout llLeap;
     private CheckBox cbLeap;
+    private Person mCurPerson;
+    private boolean isEditExistPerson;
 
     @Override
     protected int getLayoutId(){
@@ -34,8 +36,10 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
 
     @Override
     protected void initView(){
+        mCurPerson = (Person) getIntent().getSerializableExtra("person");
+        isEditExistPerson = mCurPerson != null;
         TextView tvTitle = ViewUtil.findView(this, R.id.tv_title);
-        tvTitle.setText("添加");
+        tvTitle.setText(isEditExistPerson ? "编辑" : "添加");
         etName = ViewUtil.findView(this, R.id.et_name);
         etYear = ViewUtil.findView(this, R.id.et_year);
         etMonth = ViewUtil.findView(this, R.id.et_month);
@@ -49,9 +53,32 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked){
                 llLeap.setVisibility(checked ? View.VISIBLE : View.INVISIBLE);
-                cbLeap.setChecked(false);
+                if(!isEditExistPerson){
+                    cbLeap.setChecked(false);
+                }
             }
         });
+        fillPersonInfoForEdit();
+    }
+
+    private void fillPersonInfoForEdit(){
+        if(!isEditExistPerson){
+            return;
+        }
+        View btnDel = ViewUtil.findView(this, R.id.btn_del);
+        btnDel.setVisibility(View.VISIBLE);
+        btnDel.setOnClickListener(this);
+        etName.setText(mCurPerson.nickName);
+        etName.setSelection(mCurPerson.nickName.length());
+        rbLunar.setChecked(mCurPerson.isLunar);
+        rbSolar.setChecked(!mCurPerson.isLunar);
+        cbLeap.setChecked(mCurPerson.isLunar && mCurPerson.lunar.isLeap);
+        int year = mCurPerson.isLunar ? mCurPerson.lunar.lunarYear : mCurPerson.solar.solarYear;
+        int month = mCurPerson.isLunar ? mCurPerson.lunar.lunarMonth : mCurPerson.solar.solarMonth;
+        int day = mCurPerson.isLunar ? mCurPerson.lunar.lunarDay : mCurPerson.solar.solarDay;
+        etYear.setText(String.valueOf(year));
+        etMonth.setText(String.valueOf(month));
+        etDay.setText(String.valueOf(day));
     }
 
     @Override
@@ -62,6 +89,7 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
 
     @Override
     protected void destroyPresenter(){
+        mAddPersonPresenter.detachView();
     }
 
     @Override
@@ -85,7 +113,17 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
             case R.id.btn_save:
                 addPerson();
                 break;
+            case R.id.btn_del:
+                delPerson();
+                break;
         }
+    }
+
+    private void delPerson(){
+        if(!isEditExistPerson){
+            return;
+        }
+        mAddPersonPresenter.deletePerson(mCurPerson);
     }
 
     private void addPerson(){
@@ -105,6 +143,11 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
         int month = Integer.parseInt(monthStr);
         int day = Integer.parseInt(dayStr);
         Person person = new Person(name, year, month, day, rbLunar.isChecked(), cbLeap.isChecked());
-        mAddPersonPresenter.addPerson(person);
+        if(isEditExistPerson){
+            person.id = mCurPerson.id;
+            mAddPersonPresenter.updatePerson(person);
+        }else{
+            mAddPersonPresenter.addPerson(person);
+        }
     }
 }
