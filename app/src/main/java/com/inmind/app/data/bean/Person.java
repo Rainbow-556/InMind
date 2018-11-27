@@ -1,9 +1,9 @@
-package com.inmind.app.common.entity;
+package com.inmind.app.data.bean;
 
 import android.text.TextUtils;
 
-import com.inmind.app.common.CommonUtil;
-import com.inmind.app.common.LunarSolarConverter;
+import com.inmind.app.util.CommonUtil;
+import com.inmind.app.util.LunarSolarConverter;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -11,15 +11,21 @@ import java.util.Calendar;
 /**
  * Created by lixiang on 2017/9/4.
  */
-public class Person implements Serializable{
+public class Person implements Serializable {
     public int id;
     public String realName;
     public String nickName;
-    /**true过农历，false过公历*/
+    /**
+     * true过农历，false过公历
+     */
     public boolean isLunar;
-    /**农历*/
+    /**
+     * 农历
+     */
     public Lunar lunar;
-    /**公历*/
+    /**
+     * 公历
+     */
     public Solar solar;
     public long remainDays;
     public String birthdayDateText;
@@ -32,10 +38,10 @@ public class Person implements Serializable{
      * @param isLunar
      * @param isLeap
      */
-    public Person(String nickName, int year, int month, int day, boolean isLunar, boolean isLeap){
+    public Person(String nickName, int year, int month, int day, boolean isLunar, boolean isLeap) {
         this.nickName = nickName;
         this.isLunar = isLunar;
-        if(isLunar){
+        if (isLunar) {
             // 农历
             lunar = new Lunar();
             lunar.lunarYear = year;
@@ -44,7 +50,7 @@ public class Person implements Serializable{
             lunar.isLeap = isLeap;
             lunar.animal = LunarSolarConverter.lunarYearToShengXiao(year);
             solar = LunarSolarConverter.lunarToSolar(lunar);
-        }else{
+        } else {
             // 公历
             solar = new Solar();
             solar.solarYear = year;
@@ -55,14 +61,14 @@ public class Person implements Serializable{
         calcRemainDays();
     }
 
-    public void calcRemainDays(){
+    public void calcRemainDays() {
         Calendar cur = Calendar.getInstance();
         int year = cur.get(Calendar.YEAR);
         int month, day;
-        if(!isLunar){
+        if (!isLunar) {
             month = solar.solarMonth;
             day = solar.solarDay;
-        }else{
+        } else {
             Lunar tempLunar = new Lunar();
             tempLunar.lunarYear = year;
             tempLunar.lunarMonth = lunar.lunarMonth;
@@ -73,19 +79,19 @@ public class Person implements Serializable{
             day = solar.solarDay;
         }
         long days = CommonUtil.calcDiffDays(year, month, day);
-        if(days < 0){
+        if (days < 0) {
             days = CommonUtil.calcDiffDays(year + 1, month, day);
         }
         this.remainDays = days;
     }
 
-    public void initExtraFields(){
+    public void initExtraFields() {
         calcRemainDays();
         this.birthdayDateText = LunarSolarConverter.formatBirthdayDate(this);
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "id=" + id + ", realName=" + returnNotEmptyString(realName) + ", "
                 + "nickName=" + returnNotEmptyString(nickName) + ", "
                 + "农历=" + lunar.toString() + ", "
@@ -93,11 +99,11 @@ public class Person implements Serializable{
     }
 
     @Override
-    public boolean equals(Object obj){
-        return ((Person)obj).id == this.id;
+    public boolean equals(Object obj) {
+        return ((Person) obj).id == this.id;
     }
 
-    public static String returnNotEmptyString(String s){
+    public static String returnNotEmptyString(String s) {
         return TextUtils.isEmpty(s) ? "" : s;
     }
 }

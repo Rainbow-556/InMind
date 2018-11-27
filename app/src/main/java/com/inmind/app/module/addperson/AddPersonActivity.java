@@ -1,4 +1,4 @@
-package com.inmind.app.ui.activity;
+package com.inmind.app.module.addperson;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -10,17 +10,15 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.inmind.app.R;
-import com.inmind.app.common.ViewUtil;
-import com.inmind.app.common.entity.Person;
-import com.inmind.app.model.PersonRepositoryFileImpl;
-import com.inmind.app.mvp.contract.AddPersonContract;
-import com.inmind.app.mvp.presenter.AddPersonPresenter;
-import com.inmind.app.ui.base.BaseActivity;
+import com.inmind.app.util.ViewUtil;
+import com.inmind.app.data.bean.Person;
+import com.inmind.app.data.local.PersonFileDataSource;
+import com.inmind.app.base.BaseActivity;
 
 /**
  * Created by lixiang on 2017/9/4.
  */
-public final class AddPersonActivity extends BaseActivity implements AddPersonContract.IAddPersonView, View.OnClickListener{
+public final class AddPersonActivity extends BaseActivity implements AddPersonContract.IAddPersonView, View.OnClickListener {
     private AddPersonContract.IAddPersonPresenter mAddPersonPresenter;
     private EditText etName, etYear, etMonth, etDay;
     private RadioButton rbSolar, rbLunar;
@@ -30,12 +28,12 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
     private boolean isEditExistPerson;
 
     @Override
-    protected int getLayoutId(){
+    protected int getLayoutId() {
         return R.layout.activity_add_person;
     }
 
     @Override
-    protected void initView(){
+    protected void initView() {
         mCurPerson = (Person) getIntent().getSerializableExtra("person");
         isEditExistPerson = mCurPerson != null;
         TextView tvTitle = ViewUtil.findView(this, R.id.tv_title);
@@ -49,11 +47,11 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
         llLeap = ViewUtil.findView(this, R.id.ll_leap);
         cbLeap = ViewUtil.findView(this, R.id.cb_leap);
         ViewUtil.findView(this, R.id.btn_save).setOnClickListener(this);
-        rbLunar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+        rbLunar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked){
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 llLeap.setVisibility(checked ? View.VISIBLE : View.INVISIBLE);
-                if(!isEditExistPerson){
+                if (!isEditExistPerson) {
                     cbLeap.setChecked(false);
                 }
             }
@@ -61,8 +59,8 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
         fillPersonInfoForEdit();
     }
 
-    private void fillPersonInfoForEdit(){
-        if(!isEditExistPerson){
+    private void fillPersonInfoForEdit() {
+        if (!isEditExistPerson) {
             return;
         }
         View btnDel = ViewUtil.findView(this, R.id.btn_del);
@@ -82,34 +80,19 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
     }
 
     @Override
-    protected void initPresenter(){
-        mAddPersonPresenter = new AddPersonPresenter(new PersonRepositoryFileImpl());
+    protected void initPresenter() {
+        mAddPersonPresenter = new AddPersonPresenter();
+        addPresenter(mAddPersonPresenter);
         mAddPersonPresenter.attachView(this);
     }
 
     @Override
-    protected void destroyPresenter(){
-        mAddPersonPresenter.detachView();
+    protected void initData() {
     }
 
     @Override
-    public void showLoading(boolean cancelable){
-        showLoadingInner(cancelable);
-    }
-
-    @Override
-    public void hideLoading(){
-        hideLoadingInner();
-    }
-
-    @Override
-    public void showToast(String msg){
-        showToastInner(msg);
-    }
-
-    @Override
-    public void onClick(View view){
-        switch(view.getId()){
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.btn_save:
                 addPerson();
                 break;
@@ -119,34 +102,34 @@ public final class AddPersonActivity extends BaseActivity implements AddPersonCo
         }
     }
 
-    private void delPerson(){
-        if(!isEditExistPerson){
+    private void delPerson() {
+        if (!isEditExistPerson) {
             return;
         }
         mAddPersonPresenter.deletePerson(mCurPerson);
     }
 
-    private void addPerson(){
+    private void addPerson() {
         String name = etName.getText().toString();
-        if(TextUtils.isEmpty(name)){
-            showToastInner("name is empty");
+        if (TextUtils.isEmpty(name)) {
+            showToast("name is empty");
             return;
         }
         String yearStr = etYear.getText().toString();
         String monthStr = etMonth.getText().toString();
         String dayStr = etDay.getText().toString();
-        if(TextUtils.isEmpty(yearStr) || TextUtils.isEmpty(monthStr) || TextUtils.isEmpty(dayStr)){
-            showToastInner("year, month or day is empty");
+        if (TextUtils.isEmpty(yearStr) || TextUtils.isEmpty(monthStr) || TextUtils.isEmpty(dayStr)) {
+            showToast("year, month or day is empty");
             return;
         }
         int year = Integer.parseInt(yearStr);
         int month = Integer.parseInt(monthStr);
         int day = Integer.parseInt(dayStr);
         Person person = new Person(name, year, month, day, rbLunar.isChecked(), cbLeap.isChecked());
-        if(isEditExistPerson){
+        if (isEditExistPerson) {
             person.id = mCurPerson.id;
             mAddPersonPresenter.updatePerson(person);
-        }else{
+        } else {
             mAddPersonPresenter.addPerson(person);
         }
     }

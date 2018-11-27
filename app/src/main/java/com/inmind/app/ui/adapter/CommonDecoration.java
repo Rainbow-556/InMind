@@ -7,28 +7,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.inmind.app.R;
-import com.inmind.app.common.CommonUtil;
+import com.inmind.app.util.CommonUtil;
 
 /**
  * Created by lixiang on 2017/9/5.
  */
-public final class CommonDecoration extends RecyclerView.ItemDecoration{
+public final class CommonDecoration extends RecyclerView.ItemDecoration {
     private int mDividerHeight = (int) CommonUtil.dp2px(1);
     private int mLeftMargin = (int) CommonUtil.dp2px(25);
     private int mRightMargin = (int) CommonUtil.dp2px(25);
     private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    public CommonDecoration(){
+    public CommonDecoration() {
         mPaint.setColor(CommonUtil.getColor(R.color.common_gray_line));
         mPaint.setStrokeWidth(mDividerHeight);
         mPaint.setStyle(Paint.Style.STROKE);
     }
 
     @Override
-    public void onDraw(Canvas canvas, RecyclerView parent, RecyclerView.State state){
+    public void onDraw(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
         final int childCount = parent.getChildCount();
         int parentWidth = parent.getWidth();
-        for(int i = 0; i < childCount; i++){
+        for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
             float top = child.getBottom() + mDividerHeight / 2;
             canvas.drawLine(mLeftMargin, top, parentWidth - mRightMargin, top, mPaint);
@@ -36,11 +36,11 @@ public final class CommonDecoration extends RecyclerView.ItemDecoration{
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state){
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int adapterPosition = parent.getChildAdapterPosition(view);
-        if(adapterPosition < parent.getAdapter().getItemCount() - 1){
+        if (adapterPosition < parent.getAdapter().getItemCount() - 1) {
             outRect.set(0, 0, 0, mDividerHeight);
-        }else{
+        } else {
             outRect.set(0, 0, 0, 0);
         }
     }

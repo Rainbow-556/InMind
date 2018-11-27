@@ -1,21 +1,22 @@
-package com.inmind.app.common;
+package com.inmind.app.util;
 
-import com.inmind.app.common.entity.Lunar;
-import com.inmind.app.common.entity.Person;
-import com.inmind.app.common.entity.Solar;
+import com.inmind.app.data.bean.Lunar;
+import com.inmind.app.data.bean.Person;
+import com.inmind.app.data.bean.Solar;
 
 /**
  * Created by lixiang on 2017/1/10.
  * 公历(阳历) 农历(阴历)转换，支持时间段从1900-2100
  */
-public class LunarSolarConverter{
+public class LunarSolarConverter {
     private static final String[] Tian_Gan = {"甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"};
-    private static final String[] Di_Zhi =     {"子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"};
+    private static final String[] Di_Zhi = {"子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"};
     private static final String[] Sheng_Xiao = {"鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"};
     private static final String[] MONTH_ARR = {"", "正", "二", "三", "四", "五", "六", "七", "八", "九", "十", "冬", "腊"};
     private static final String[] DAY_ARR = {"", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
-
-    /**|----4位闰月|-------------13位1为30天，0为29天|*/
+    /**
+     * |----4位闰月|-------------13位1为30天，0为29天|
+     */
     private static int[] LUNAR_MONTH_DAYS = {1887, 0x1694, 0x16aa, 0x4ad5,
             0xab6, 0xc4b7, 0x4ae, 0xa56, 0xb52a, 0x1d2a, 0xd54, 0x75aa, 0x156a,
             0x1096d, 0x95c, 0x14ae, 0xaa4d, 0x1a4c, 0x1b2a, 0x8d55, 0xad4,
@@ -45,7 +46,6 @@ public class LunarSolarConverter{
             0xcd6a, 0xada, 0x95c, 0x949d, 0x149a, 0x1a2a, 0x5b25, 0x1aa4,
             0xfb52, 0x16b4, 0xaba, 0xa95b, 0x936, 0x1496, 0x9a4b, 0x154a,
             0x136a5, 0xda4, 0x15ac};
-
     private static int[] SOLAR_1_1 = {1887, 0xec04c, 0xec23f, 0xec435, 0xec649,
             0xec83e, 0xeca51, 0xecc46, 0xece3a, 0xed04d, 0xed242, 0xed436,
             0xed64a, 0xed83f, 0xeda53, 0xedc48, 0xede3d, 0xee050, 0xee244,
@@ -80,45 +80,44 @@ public class LunarSolarConverter{
             0x105e45, 0x106039, 0x10624c, 0x106441, 0x106635, 0x106849,
             0x106a3d, 0x106c51, 0x106e47, 0x10703c, 0x10724f, 0x107444,
             0x107638, 0x10784c, 0x107a3f, 0x107c53, 0x107e48};
-
     private static final long[] LUNAR_INFO = new long[]{0x04bd8, 0x04ae0,
-                    0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0,
-                    0x09ad0, 0x055d2, 0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255,
-                    0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977, 0x04970, 0x0a4b0,
-                    0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2,
-                    0x04970, 0x06566, 0x0d4a0, 0x0ea50, 0x06e95, 0x05ad0, 0x02b60,
-                    0x186e3, 0x092e0, 0x1c8d7, 0x0c950, 0x0d4a0, 0x1d8a6, 0x0b550,
-                    0x056a0, 0x1a5b4, 0x025d0, 0x092d0, 0x0d2b2, 0x0a950, 0x0b557,
-                    0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5d0, 0x14573, 0x052d0,
-                    0x0a9a8, 0x0e950, 0x06aa0, 0x0aea6, 0x0ab50, 0x04b60, 0x0aae4,
-                    0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0, 0x096d0,
-                    0x04dd5, 0x04ad0, 0x0a4d0, 0x0d4d4, 0x0d250, 0x0d558, 0x0b540,
-                    0x0b5a0, 0x195a6, 0x095b0, 0x049b0, 0x0a974, 0x0a4b0, 0x0b27a,
-                    0x06a50, 0x06d40, 0x0af46, 0x0ab60, 0x09570, 0x04af5, 0x04970,
-                    0x064b0, 0x074a3, 0x0ea50, 0x06b58, 0x055c0, 0x0ab60, 0x096d5,
-                    0x092e0, 0x0c960, 0x0d954, 0x0d4a0, 0x0da50, 0x07552, 0x056a0,
-                    0x0abb7, 0x025d0, 0x092d0, 0x0cab5, 0x0a950, 0x0b4a0, 0x0baa4,
-                    0x0ad50, 0x055d9, 0x04ba0, 0x0a5b0, 0x15176, 0x052b0, 0x0a930,
-                    0x07954, 0x06aa0, 0x0ad50, 0x05b52, 0x04b60, 0x0a6e6, 0x0a4e0,
-                    0x0d260, 0x0ea65, 0x0d530, 0x05aa0, 0x076a3, 0x096d0, 0x04bd7,
-                    0x04ad0, 0x0a4d0, 0x1d0b6, 0x0d250, 0x0d520, 0x0dd45, 0x0b5a0,
-                    0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0, 0x0aa50, 0x1b255,
-                    0x06d20, 0x0ada0};
+            0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0,
+            0x09ad0, 0x055d2, 0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255,
+            0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977, 0x04970, 0x0a4b0,
+            0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2,
+            0x04970, 0x06566, 0x0d4a0, 0x0ea50, 0x06e95, 0x05ad0, 0x02b60,
+            0x186e3, 0x092e0, 0x1c8d7, 0x0c950, 0x0d4a0, 0x1d8a6, 0x0b550,
+            0x056a0, 0x1a5b4, 0x025d0, 0x092d0, 0x0d2b2, 0x0a950, 0x0b557,
+            0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5d0, 0x14573, 0x052d0,
+            0x0a9a8, 0x0e950, 0x06aa0, 0x0aea6, 0x0ab50, 0x04b60, 0x0aae4,
+            0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0, 0x096d0,
+            0x04dd5, 0x04ad0, 0x0a4d0, 0x0d4d4, 0x0d250, 0x0d558, 0x0b540,
+            0x0b5a0, 0x195a6, 0x095b0, 0x049b0, 0x0a974, 0x0a4b0, 0x0b27a,
+            0x06a50, 0x06d40, 0x0af46, 0x0ab60, 0x09570, 0x04af5, 0x04970,
+            0x064b0, 0x074a3, 0x0ea50, 0x06b58, 0x055c0, 0x0ab60, 0x096d5,
+            0x092e0, 0x0c960, 0x0d954, 0x0d4a0, 0x0da50, 0x07552, 0x056a0,
+            0x0abb7, 0x025d0, 0x092d0, 0x0cab5, 0x0a950, 0x0b4a0, 0x0baa4,
+            0x0ad50, 0x055d9, 0x04ba0, 0x0a5b0, 0x15176, 0x052b0, 0x0a930,
+            0x07954, 0x06aa0, 0x0ad50, 0x05b52, 0x04b60, 0x0a6e6, 0x0a4e0,
+            0x0d260, 0x0ea65, 0x0d530, 0x05aa0, 0x076a3, 0x096d0, 0x04bd7,
+            0x04ad0, 0x0a4d0, 0x1d0b6, 0x0d250, 0x0d520, 0x0dd45, 0x0b5a0,
+            0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0, 0x0aa50, 0x1b255,
+            0x06d20, 0x0ada0};
 
-    private static int getBitInt(int data, int length, int shift){
+    private static int getBitInt(int data, int length, int shift) {
         return (data & (((1 << length) - 1) << shift)) >> shift;
     }
 
-    private static long solarToInt(int y, int m, int d){
+    private static long solarToInt(int y, int m, int d) {
         m = (m + 9) % 12;
         y = y - m / 10;
         return 365 * y + y / 4 - y / 100 + y / 400 + (m * 306 + 5) / 10 + (d - 1);
     }
 
-    private static Solar solarFromInt(long g){
+    private static Solar solarFromInt(long g) {
         long y = (10000 * g + 14780) / 3652425;
         long ddd = g - (365 * y + y / 4 - y / 100 + y / 400);
-        if(ddd < 0){
+        if (ddd < 0) {
             y--;
             ddd = g - (365 * y + y / 4 - y / 100 + y / 400);
         }
@@ -138,7 +137,7 @@ public class LunarSolarConverter{
      * @param year 农历年份
      * @return
      */
-    private static int getLeapMonth(int year){
+    private static int getLeapMonth(int year) {
         return (int) (LUNAR_INFO[year - 1900] & 0xf);
     }
 
@@ -147,7 +146,7 @@ public class LunarSolarConverter{
      * @return String of Ganzhi: 甲子年
      * Tiangan:甲乙丙丁戊己庚辛壬癸<br/>Dizhi: 子丑寅卯辰巳无为申酉戌亥
      */
-    public static String lunarYearToGanZhi(int lunarYear){
+    public static String lunarYearToGanZhi(int lunarYear) {
         return Tian_Gan[(lunarYear - 4) % 10] + Di_Zhi[(lunarYear - 4) % 12] + "年";
     }
 
@@ -156,26 +155,26 @@ public class LunarSolarConverter{
      * @param lunarYear
      * @return
      */
-    public static String lunarYearToShengXiao(int lunarYear){
+    public static String lunarYearToShengXiao(int lunarYear) {
         return Sheng_Xiao[(lunarYear - 4) % 12];
     }
 
     /**
-     *农历转公历
+     * 农历转公历
      */
-    public static Solar lunarToSolar(Lunar lunar){
+    public static Solar lunarToSolar(Lunar lunar) {
         int days = LUNAR_MONTH_DAYS[lunar.lunarYear - LUNAR_MONTH_DAYS[0]];
         int leap = getBitInt(days, 4, 13);
         int offset = 0;
         int loopend = leap;
-        if(!lunar.isLeap){
-            if(lunar.lunarMonth <= leap || leap == 0){
+        if (!lunar.isLeap) {
+            if (lunar.lunarMonth <= leap || leap == 0) {
                 loopend = lunar.lunarMonth - 1;
-            }else{
+            } else {
                 loopend = lunar.lunarMonth;
             }
         }
-        for(int i = 0; i < loopend; i++){
+        for (int i = 0; i < loopend; i++) {
             offset += getBitInt(days, 1, 12 - i) == 1 ? 30 : 29;
         }
         offset += lunar.lunarDay;
@@ -187,15 +186,15 @@ public class LunarSolarConverter{
     }
 
     /**
-     *公历转农历
+     * 公历转农历
      */
-    public static Lunar solarToLunar(Solar solar){
+    public static Lunar solarToLunar(Solar solar) {
         Lunar lunar = new Lunar();
         int index = solar.solarYear - SOLAR_1_1[0];
         int data = (solar.solarYear << 9) | (solar.solarMonth << 5)
                 | (solar.solarDay);
         int solar11 = 0;
-        if(SOLAR_1_1[index] > data){
+        if (SOLAR_1_1[index] > data) {
             index--;
         }
         solar11 = SOLAR_1_1[index];
@@ -210,12 +209,12 @@ public class LunarSolarConverter{
         int lunarM = 1;
         int lunarD = 1;
         offset += 1;
-        for(int i = 0; i < 13; i++){
+        for (int i = 0; i < 13; i++) {
             int dm = getBitInt(days, 1, 12 - i) == 1 ? 30 : 29;
-            if(offset > dm){
+            if (offset > dm) {
                 lunarM++;
                 offset -= dm;
-            }else{
+            } else {
                 break;
             }
         }
@@ -223,9 +222,9 @@ public class LunarSolarConverter{
         lunar.lunarYear = lunarY;
         lunar.lunarMonth = lunarM;
         lunar.isLeap = false;
-        if(leap != 0 && lunarM > leap){
+        if (leap != 0 && lunarM > leap) {
             lunar.lunarMonth = lunarM - 1;
-            if(lunarM == leap + 1){
+            if (lunarM == leap + 1) {
                 lunar.isLeap = true;
             }
         }
@@ -234,30 +233,30 @@ public class LunarSolarConverter{
         return lunar;
     }
 
-    public static String formatBirthdayDate(Person person){
-        try{
+    public static String formatBirthdayDate(Person person) {
+        try {
             StringBuilder ret = new StringBuilder();
-            if(person.isLunar){
+            if (person.isLunar) {
                 Lunar lunar = person.lunar;
                 ret.append(MONTH_ARR[lunar.lunarMonth]).append("月");
-                if(lunar.lunarDay <= 10){
+                if (lunar.lunarDay <= 10) {
                     ret.append("初").append(DAY_ARR[lunar.lunarDay]);
-                }else if(lunar.lunarDay < 20){
+                } else if (lunar.lunarDay < 20) {
                     ret.append("十").append(DAY_ARR[lunar.lunarDay - 10]);
-                }else if(lunar.lunarDay == 20){
+                } else if (lunar.lunarDay == 20) {
                     ret.append("二十");
-                }else if(lunar.lunarDay >= 30){
+                } else if (lunar.lunarDay >= 30) {
                     ret.append("三十");
-                }else{
+                } else {
                     ret.append("廿").append(DAY_ARR[lunar.lunarDay - 20]);
                 }
-            }else{
+            } else {
                 Solar solar = person.solar;
                 ret.append(String.valueOf(solar.solarMonth)).append("月")
                         .append(String.valueOf(solar.solarDay)).append("日");
             }
             return ret.toString();
-        }catch(Exception e){
+        } catch (Exception e) {
             return "";
         }
     }
